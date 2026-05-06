@@ -1,0 +1,30 @@
+{% extends "giving/base.html" %}
+
+{% block sidebar %}{% endblock %}
+{% block content %}
+
+    <ul>
+        {% if request.user.is_authenticated %}
+            <li><a href="{% url 'giving:donate_list' %}">Add or update a donor</a></li>
+            <li><a href="{% url 'giving:donate_list' %}">Add a donation</a></li>
+            <li><a href="{% url 'giving:donation_batch' %}">Process a batch of donations</a></li>
+            <li><a href="{% url 'giving:donation_batch_list' %}">List donation batches</a></li>
+            <li><a href="{% url 'giving:export_donations' %}">Export donations</a></li>
+            <li><a href="{% url 'giving:export_donation_summary' %}">Export donation summary</a></li>
+            <li><a href="{% url 'giving:export_donation_summary_yr' %}">Export donation summary by year</a></li>
+
+            <li><a href="{% url 'giving:logout' %}">Logout</a></li>
+        {% else %}
+            <li><a href="{% url 'giving:login' %}">Login</a></li>
+
+        {% endif %}
+
+    </ul>
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

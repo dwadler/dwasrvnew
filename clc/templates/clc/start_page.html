@@ -1,0 +1,27 @@
+{% extends "clc/base.html" %}
+
+{% block sidebar %}{% endblock %}
+{% block content %}
+    {% if request.user.is_authenticated %}
+        <ul>
+            <li><a href="{% url 'clc:address_list' %}">List, add or change addresses</a></li>
+            <li><a href="{% url 'clc:export_members' %}">Export Members</a></li>
+            <li><a href="{% url 'clc:export_envelope_list' %}">Export Envelope List</a></li>
+            <li><a href="{% url 'clc:export_advent_list' %}">Export Advent List</a></li>
+            <li><a href="{% url 'clc:create_directory' %}">Create Directory</a></li>
+            <li><a href="{% url 'clc:logout' %}">Logout</a></li>
+        </ul>
+    {% else %}
+        <li><a href="{% url 'clc:login' %}">Login</a></li>
+
+    {% endif %}
+
+    </ul>
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}cr

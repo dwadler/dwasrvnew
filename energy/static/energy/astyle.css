@@ -1,0 +1,55 @@
+li a {
+    color: blue;
+}
+
+body {
+    /*
+        background: white url("images/background.jpg") no-repeat;
+    */
+}
+
+table, td, th {
+    border: 1px solid black;
+    text-align: right
+}
+
+table {
+    border-collapse: collapse;
+
+
+}
+
+td {
+    /*height: 50px;*/
+    vertical-align: top;
+}
+
+table.condensed {
+    border-collapse: collapse;
+    width: auto;
+    border: 1px solid black;
+}
+
+td.condensed {
+    padding: 5px;
+    border: 1px solid black;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.btn {
+    outline: none;
+    color: black;
+    background-color: transparent;
+    box-shadow: 0 0 0 0;
+}
+
+.clearfix {
+    margin: 15px;
+}

@@ -1,0 +1,17 @@
+{% extends "energy/base.html" %}
+
+{% block sidebar %}{% endblock %}
+
+{% block content %}
+    <h1>Update address</h1>
+
+    <a href="{% url 'energy:ev6_list' %}">Cancel</a>
+
+    <form method="post">{% csrf_token %}
+        <input type="submit" value="Save">
+        <table>
+            {{ form.as_table }}
+        </table>
+    </form>
+
+{% endblock %}

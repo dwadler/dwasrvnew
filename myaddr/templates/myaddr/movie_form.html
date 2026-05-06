@@ -1,0 +1,24 @@
+{% extends "myaddr/base.html" %}
+
+{% block sidebar %}{% endblock %}
+
+{% block content %}
+    <h1>Update movie</h1>
+
+    <a href="{% url 'myaddr:movie_list' %}">Cancel</a>
+
+    <form method="post">{% csrf_token %}
+        <input type="submit" value="Save">
+        <table>
+            {{ form.as_table }}
+        </table>
+    </form>
+
+    {% if object.pk %}
+        <form method="GET" action="{% url 'myaddr:myaddr_delete' object.pk %}">
+            {% csrf_token %}
+            <input type="submit" class="btn btn-sm btn-danger" value="Delete"></input>
+        </form>
+    {% endif %}
+
+{% endblock %}

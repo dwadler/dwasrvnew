@@ -1,0 +1,33 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'dbsk/style.css' %}">
+
+<h1>Schedule detail</h1>
+Here it is:
+<p>
+<table class="test1">
+    <tr>
+        <td class="test1">
+            Provider: {{ schedule.provider }} </td>
+        <td> {{ schedule.provider.phone1 }}
+        </td>
+    </tr>
+    </tr>
+    <td class="test1">
+        <br>Volunteer1: {{ schedule.volunteer1 }} </td>
+    <td>  {{ schedule.volunteer1.phone1 }}
+    </td>
+    </tr>
+    </tr>
+    <td class="test1">
+        <br>Volunteer2: {{ schedule.volunteer2 }} </td>
+    <td>  {{ schedule.volunteer1.phone1 }}
+    </td>
+    </tr>
+    </tr>
+    <td class="test1">
+        <br>Notes: {{ schedule.notes }}
+    </td>
+    </tr>
+</table>
+</p>

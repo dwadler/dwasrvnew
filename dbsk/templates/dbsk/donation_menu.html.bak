@@ -1,0 +1,15 @@
+{% extends "dbsk/base.html" %}
+
+{% block sidebar %}{% endblock %}
+{% block content %}
+
+  <a href="{% url 'dbsk:index' %}">Back to main menu</a>
+<ul>
+<li><a href="{% url 'dbsk:how_to_use' %}">How to process donations</a></li>
+<li><a href="{% url 'dbsk:donate_list' %}">Add a donation</a></li>
+<li><a href="{% url 'dbsk:donor_list' %}">View or add donors</a></li>
+<li><a href="{% url 'dbsk:donation_batch' %}">Process a batch of donations</a></li>
+<li><a href="{% url 'dbsk:donation_batch_list' %}">List donation batches</a></li>
+<li><a href="{% url 'dbsk:logout' %}">Logout</a></li>
+</ul>
+{% endblock %}

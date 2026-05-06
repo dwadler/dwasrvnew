@@ -1,0 +1,64 @@
+from django.conf import settings
+from django.conf.urls.static import static
+from django.urls import path
+
+from . import calendar
+from . import views, views_volunteer, utils
+from . import views_donor
+
+app_name = 'dbsk'
+
+urlpatterns = [
+                  path('', views.start_page, name='index'),
+                  path('login', views.login, name='login'),
+                  path('logout', views.logout_request, name='logout'),
+                  path('export1', views_donor.export_donor_info, name='export-donor-info'),
+                  path('fixphone', views.fix_phone, name='fix_phone'),
+                  path('schedule', calendar.CalendarView.as_view(), name='schedule'),
+                  path('schedule/restaurants', calendar.RestaurantCalendarView.as_view(), name='restaurants'),
+                  #   path('createschedule', views.create_schedule_for_date, name='create_schedule'),
+                  path('deleteschedule/<int:pk>/delete/', views.ScheduleDeleteView.as_view(), name='delete_schedule'),
+                  path('schedulelist', views.ScheduleList.as_view(), name='schedule_list'),
+                  path('schedule/<int:pk>/update', views.ScheduleUpdateView.as_view(), name='schedule_update'),
+                  path('schedule/create', views.ScheduleCreateView.as_view(), name='schedule_create'),
+                  path('schedule/labels', views.provider_schedule_labels, name='provider_schedule_labels'),
+                  #   path('schedule/<int:pk>/', views.ScheduleDetailView.as_view(), name='schedule_view'),
+
+                  path('volunteer', views.VolunteerList.as_view(), name='volunteer_list'),
+                  path('volunteeremail', views.VolunteerEmail.as_view(), name='volunteer_email'),
+                  path('cantvolunteer', views.CantVolunteer.as_view(), name='cantvolunteer'),
+                  path('volunteerreport', views_volunteer.volunteer_report, name='volunteer_report'),
+                  path('emailblast', views_volunteer.email_blast, name='email_blast'),
+                  path('smstest', utils.sms_test, name='sms_test'),
+                  path('smsallow', views_volunteer.sms_allow, name='sms_allow'),
+                  path('sendreminders', views_volunteer.send_reminders, name='send_reminders'),
+                  path('volunteer/<int:pk>/update/', views.VolunteerUpdateView.as_view(), name='volunteer_update'),
+                  path('volunteer/create/', views.VolunteerCreateView.as_view(), name='volunteer_create'),
+                  path('volunteer/<int:pk>/delete/', views.VolunteerDeleteView.as_view(), name='delete_volunteer'),
+
+                  path('volunteer/export', views.export_volunteers_csv, name='export_volunteers_csv'),
+                  path('volunteer/export_docx', views.export_volunteers_docx, name='export_volunteers_docx'),
+
+                  path('provider', views.ProviderList.as_view(), name='provider'),
+                  path('provider/<int:pk>/update/', views.ProviderUpdateView.as_view(), name='provider_update'),
+                  path('provider/create/', views.ProviderCreateView.as_view(), name='provider_create'),
+                  path('provider/<int:pk>/delete/', views.ProviderDeleteView.as_view(), name='delete_provider'),
+                  path('provider/export', views.export_providers_csv, name='export_providers_csv'),
+
+                  path('donor', views_donor.DonorList.as_view(), name='donor_list'),
+                  path('donor/<int:pk>/update/', views_donor.DonorUpdateView.as_view(), name='donor_update'),
+                  path('donor/create/', views_donor.DonorCreateView.as_view(), name='donor_create'),
+                  path('donor/<int:pk>/delete/', views_donor.DonorDeleteView.as_view(), name='delete_donor'),
+                  path('load-donors/', views_donor.load_donors, name='ajax_load_donors'),
+
+                  path('donation_menu', views_donor.donation_menu, name='donation_menu'),
+                  path('how_to_use', views_donor.how_to_use, name='how_to_use'),
+                  path('donation/create', views_donor.DonationCreateView.as_view(), name='donation_create'),
+                  path('donation/<int:pk>/update/', views_donor.DonationUpdateView.as_view(), name='donation_update'),
+                  path('donation/<int:pk>/delete', views_donor.DonationDeleteView.as_view(), name='donation_delete'),
+
+                  path('donation', views_donor.CreateDonationList.as_view(), name='donate_list'),
+                  path('donationbatch', views_donor.DonationBatch.as_view(), name='donation_batch'),
+                  path('donationbatchlist', views_donor.DonationBatchList.as_view(), name='donation_batch_list'),
+
+              ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -1,0 +1,28 @@
+{% extends "dbsk/base.html" %}
+
+{% block sidebar %}{% endblock %}
+{% block content %}
+    <h2>If you are unable to volunteer as scheduled</h2>
+    <a href="{% url 'dbsk:index' %}">Return to main menu</a>
+    <p>
+        Please contact another volunteer in the list below to get a substitute and notify your partner of the change.
+    </p>
+    <p>
+        If you are not able to find a substitute, notify your partner, call the soup provider to let them know that
+        we will not need the soup and call Eleanor or Pastor so that a notice can be put on the door.
+    </p>
+    {% if messages %}
+        <ul>
+            {% for m in messages %}
+                <li>
+
+                {{ m }}
+
+
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No messages are available.</p>
+    {% endif %}
+
+{% endblock %}

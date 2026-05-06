@@ -1,0 +1,5 @@
+<ul>
+    {% for address in addresses %}
+        <li><a href="{% url 'myaddr:myaddr_update' address.pk %}">{{ address }}</li>
+    {% endfor %}
+</ul>

@@ -1,0 +1,40 @@
+{% extends "dbsk/base.html" %}
+
+{% block sidebar %}{% endblock %}
+{% block content %}
+
+    <h2>Provider Listing on {{ timenow }}</h2>
+    <p><a href="{% url 'dbsk:index' %}">Back to main menu</a></p>
+    <p>
+        Click on a name in the list to edit or see the details. Click
+        <a href="{% url 'dbsk:provider_create' %}"> Add Provider </a>
+        to add a new provider
+    </p>
+    <p>
+        <a href="{% url 'dbsk:export_providers_csv' %}"> Export </a>Providers as spreadsheet
+    </p>
+    {% if object_list %}
+        <table border="1">
+            {% for v in object_list %}
+                <tr>
+                <td>
+                    <a href="{% url 'dbsk:provider_update' v.pk %}">
+                        {{ v.provider_name }}
+                    </a>
+                    {% if v.addr1 %} <br>{{ v.addr1 }} {% endif %}
+                    {% if v.addr2 %} <br>{{ v.addr2 }} {% endif %}
+                    {% if v.city %} <br>{{ v.city }}, {{ v.state }} {{ v.zip }} {% endif %}
+
+                </td>
+                <td>
+                    {{ v.phone1 }}
+                    {% if v.phone2 %} <br>{{ v.phone2 }} {% endif %}
+                    {% if v.email %} <br>{{ v.email }} {% endif %}
+                    {% if v.contact_name %} <br>Contact: {{ v.contact_name }} {% endif %}
+                    {% if v.notes %} <br>Notes: {{ v.notes }} {% endif %}
+                </td>
+            {% endfor %}
+        </table  {% else %}
+        <p>No providers are available.</p>
+    {% endif %}
+{% endblock %}

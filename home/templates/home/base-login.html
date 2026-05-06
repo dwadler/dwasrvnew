@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'home/astyle.css' %}">
+    <title>{% block title %}David's Database{% endblock %}</title>
+    {% block headstuff %}
+    {% endblock %}
+</head>
+
+<body>
+<img src="{% static "home/images/HeadingLogo.jpg" %}"/>
+
+<div id="sidebar">
+    {% block sidebar %}
+        <ul>
+        {% if user.is_authenticated %}
+            <li>User: {{ user.get_username }}</li>
+            <li><a href="{% url 'logout' %}?next={{ request.path }}">Logout</a></li>
+        {% else %}
+            <li><a href="{% url 'login' %}?next={{ request.path }}">Login</a></li>
+        {% endif %}
+        </eul>
+    {% endblock %}
+</div>
+
+<div id="content">
+    {% block content %}{% endblock %}
+</div>
+</body>
+</html>

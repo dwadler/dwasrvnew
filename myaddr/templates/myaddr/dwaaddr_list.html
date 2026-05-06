@@ -1,0 +1,40 @@
+{% extends "myaddr/base.html" %}
+
+{% block sidebar %}{% endblock %}
+
+{% block content %}
+
+    <a href="{% url 'myaddr:myaddr_create' %}">Create a new address</a>
+
+    <form method="GET" action="{% url 'myaddr:myaddr_list' %}">
+        {% csrf_token %}
+        <input type="radio" name="filter" value="active" checked> Active<br>
+        <input type="radio" name="filter" value="all"> All<br>
+        <p><label for="name_filter">List last name starts with:</label> <input type="text" value="{{ name_filter }}"
+                                                                               name="name_filter" maxlength="40"
+                                                                               id="id_city"></p>
+        <input type="submit" class="btn btn-sm btn-danger" value="refresh"></input>
+    </form>
+
+    {% if object_list %}
+        <table class="table table-striped">
+            <tr>
+                <th>Id</th>
+                <th>Last Name</th>
+                <th>phone1</th>
+                <th>e-mail</th>
+            </tr>
+            {% for addr in object_list %}
+                <tr>
+                    <td>{{ addr.id }}</td>
+                    <td><a href="{% url 'myaddr:myaddr_update' addr.pk %}">{{ addr.addr_name }}</td>
+                    <td>{{ addr.phone1 }}</td>
+                    <td>{{ addr.email }}</td>
+                </tr>
+            {% endfor %}
+        </table
+    {% else %}
+        <p>No addresses are available.</p>
+    {% endif %}
+
+{% endblock %}

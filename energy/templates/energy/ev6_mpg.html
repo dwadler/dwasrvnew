@@ -1,0 +1,35 @@
+{% extends "energy/base.html" %}
+
+{% block sidebar %}{% endblock %}
+
+{% block content %}
+<h2><a href="{% url 'energy:index' %}">Return to main menu</a></h2>
+    <style>
+        .alnright {
+            text-align: right;
+        }
+    </style>
+    <h2>Mileage</h2>
+    <table class="table table-striped">
+        <tr>
+            <th>Date</th>
+            <th>Odometer</th>
+            <th>Delta Miles</th>
+            <th>kWh</th>
+            <th class='alnright'>miles / kWh</th>
+            <th class='alnright'>MPGe</th>
+        </tr>
+        {% for object in object_list %}
+            <tr>
+                <td class='alnright'>{{ object.date }}</td>
+                <td class='alnright'>{{ object.odometer }}</td>
+                <td class='alnright'>{{ object.delta_miles }}</td>
+                <td class='alnright'>{{ object.kwh }}</td>
+                <td class='alnright'>{{ object.miles_kwh }}</td>
+                <td class='alnright'>{{ object.mpge }}</td>
+            </tr>
+        {% endfor %}
+    </table
+
+
+{% endblock %}

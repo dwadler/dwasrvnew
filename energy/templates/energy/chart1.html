@@ -1,0 +1,45 @@
+{% extends 'energy/base.html' %}
+{% block headstuff %}
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+{% endblock %}
+
+{% block content %}
+    <h2><a href="{% url 'energy:index' %}">Return to main menu</a>
+    </h2>
+    <h1>{{ title }}</h1>
+    <div class="clearfix">
+        <a class="btn btn-info left" href="{% url 'energy:chart' %}?{{ prev_month }}"> Previous Month </a>
+        <a class="btn btn-info right" href="{% url 'energy:chart' %}?{{ next_month }}"> Next Month </a>
+    </div>
+    <canvas id="myChart" width="800" height="400"></canvas>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [{% for label in labels %} '{{ label }}', {% endfor %}],
+                datasets: [
+                    {
+                        label: "Energy Production",
+                        data: {{ values }},
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
+{% endblock %}

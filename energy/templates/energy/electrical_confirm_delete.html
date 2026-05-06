@@ -1,0 +1,6 @@
+<h1>Delete address</h1>
+
+<form method="post">{% csrf_token %}
+    <p>Are you sure you want to delete id: {{ dwaaddr.id }}; date: {{ electrical.date }}?</p>
+    <input type="submit" value="Confirm">
+</form>

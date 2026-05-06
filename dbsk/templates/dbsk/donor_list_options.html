@@ -1,0 +1,5 @@
+<ul>
+    {% for donor in donors %}
+        <li><a href="{% url 'dbsk:donation_create' %}?donor_id={{ donor.pk }}">{{ donor }}</li>
+    {% endfor %}
+</ul>

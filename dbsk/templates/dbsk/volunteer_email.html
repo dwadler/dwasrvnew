@@ -1,0 +1,21 @@
+{% extends "dbsk/base.html" %}
+
+{% block sidebar %}{% endblock %}
+{% block content %}
+    <h2>Volunteer Listing on {{ timenow }}</h2>
+    <a href="{% url 'dbsk:index' %}">Return to main menu</a>
+    {% if messages %}
+        <table border="1">
+            {% for m in messages %}
+                <tr>
+                    <td>
+                        {{ m }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table
+    {% else %}
+        <p>No messages are available.</p>
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="{% static 'dbsk/style.css' %}">
+    <style>
+        table, td, th {
+            border: 1px solid black;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td {
+            height: 50px;
+            vertical-align: top;
+        }
+    </style>
+    <title>Django Calendar App</title>
+</head>
+<body>
+
+{% block content %}
+{% endblock %}
+
+
+{% block script %}
+{% endblock %}
+</body>
+</html>

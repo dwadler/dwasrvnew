@@ -1,0 +1,48 @@
+from django.forms import ModelForm, DateField, Form, ModelChoiceField, SelectDateWidget, CharField, RadioSelect
+from django.forms import IntegerField, DecimalField, TextInput, Textarea
+from django.forms import HiddenInput, BooleanField, ChoiceField
+
+from .models import Address
+from home.dwaforms import DwaBaseForm
+
+YN_SELECT = [('Y','Y'), ('N','N')]
+ADDRESS_TYPE_CHOICES =[
+    ("f", "Friend"),
+    ("m", "Member"),
+    ("c", "Church"),
+    ("i", "Inactive"),
+    ("x", "Other"),
+    ("d", "Deceased"),
+    ("e", "E"),
+]
+class AddressCreateForm(ModelForm):
+    address_type = ChoiceField(choices = ADDRESS_TYPE_CHOICES)
+
+    class Meta:
+        model = Address
+        fields = ['firstname', 'lastname',
+            'addrline1', 'addrline2', 'city', 'state', 'postalcode',
+            'email', 'phone', 'cell1', 'cell2', 'notes',
+            'archive', 'address_type',
+         ] 
+        widgets = {
+            'archive' : RadioSelect(choices=YN_SELECT),
+            'notes' : Textarea(attrs={'rows':2, 'cols':60}),
+        }
+        
+
+class AddressUpdateForm(ModelForm):
+    address_type = ChoiceField(choices = ADDRESS_TYPE_CHOICES, label='Address Type')
+
+    class Meta:
+        model = Address
+        fields = ['envelopeno', 'firstname', 'lastname',
+            'addrline1', 'addrline2', 'city', 'state', 'postalcode',
+            'email', 'phone', 'cell1', 'cell2', 'notes',
+            'archive', 'address_type',
+            'updateby', 'lastupdate',
+         ]   
+        widgets = {
+            'archive' : RadioSelect(choices=YN_SELECT),
+            'notes' : Textarea(attrs={'rows':2, 'cols':60}),
+        }

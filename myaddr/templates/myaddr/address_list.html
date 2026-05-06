@@ -1,0 +1,43 @@
+{% extends "myaddr/base.html" %}
+
+{% block sidebar %}{% endblock %}
+{% block content %}
+    <h2>List addresses</h2>
+    <a href="{% url 'myaddr:index' %}">Return to main menu</a>
+    <p>
+        Start typing a name to list addresses. Use '*' to get all
+
+    </p>
+    <p id="addressForm" data-addresses-url="{% url 'myaddr:ajax_load_addresses' %}"></p>
+
+    <p><label for="id_prefix">Name: </label><input type="text" name="prefix" id="id_prefix" autocomplete="off"
+                                                   autofocus>
+        <a href="{% url 'myaddr:myaddr_create' %}"> Add address </a>
+
+    </p>
+    <p>Select a name:</p>
+    <ul id="id_address">
+
+    </ul>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        $("#id_prefix").keyup(function () {
+            var url = $("#addressForm").attr("data-addresses-url");
+            var prefix = $(this).val();
+            console.log("key-up")
+            console.log(url)
+            console.log(prefix)
+            $.ajax({
+                url: url,
+                data: {
+                    'prefix': prefix
+                },
+                success: function (data) {
+                    console.log(data)
+                    $("#id_address").html(data);
+                }
+            });
+
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "giving/base.html" %}
+
+{% block sidebar %}{% endblock %}
+{% block content %}
+    <h2>Donation Batch - {{ batch_date }}</h2>
+    <style>
+
+    </style>
+    <button onclick="window.print()">Print</button>
+    <br>
+    <a href="{% url 'giving:donation_batch_save' %}?batch={{ batch }}">Save donation batch</a>
+    <br>
+    <a href="{% url 'giving:index' %}">Return to donation menu</a>
+    <p></p>
+    {% if object_list %}
+        <table border="1">
+            <tr>
+                <th>Name</th>
+                <th>Amount</th>
+                <th>Special amount</th>
+                <th>Occasion</th>
+                {% for v in object_list %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'giving:donation_update' v.pk %}">
+                                {{ v.name }}
+                            </a>
+                        </td>
+                        <td>
+                            {{ v.amount }}
+                        </td>
+                        <td>
+                            {{ v.special_amount }}
+                        </td>
+                        <td>
+                            {{ v.occasion }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            <tr>
+                <td>
+                    Total: {{ batch_total }}
+                </td>
+                <td>
+                    {{ batch_amount }}
+                </td>
+                <td>
+                    {{ batch_special }}
+                </td>
+
+                <td>
+
+                </td>
+            </tr>
+
+        </table
+    {% else %}
+        <p>No donations are available.</p>
+    {% endif %}
+{% endblock %}

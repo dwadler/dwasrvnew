@@ -1,0 +1,68 @@
+{% extends "clc/base.html" %}
+
+{% block sidebar %}{% endblock %}
+
+{% block content %}
+
+    <h1>Address Database</h1>
+    <p>
+        <a href="{% url 'clc:index' %}"> Back </a>
+    </p>
+    <p>
+        Click
+        <a href="{% url 'clc:address_create' %}"> Add </a>
+        to add a new address.
+    </p>
+    Select an address category and press "Submit"
+    <form method="GET" class="form-horizontal">{% csrf_token %}
+
+        <input type="submit" value="Submit">
+        <table border="1">
+            {{ form }}
+
+            <select name="address_type" id="id_address_type">
+                <option value="*">All</option>
+
+                <option value="f">Friend</option>
+
+                <option value="m" selected>Member</option>
+
+                <option value="c">Church</option>
+
+                <option value="i">Inactive</option>
+
+                <option value="x">Other</option>
+
+                <option value="d">Deceased</option>
+
+                <option value="e">E</option>
+
+            </select>
+        </table>
+    </form>
+
+
+    {% if object_list %}
+        <table>
+            <tr>
+                <th>Id</th>
+                <th>Type</th>
+                <th>Name</th>
+            </tr>
+            {% for v in object_list %}
+                <tr>
+                    <td><a href="{% url 'clc:address_update' v.pk %}">
+                        {{ v.id }}</a></td>
+                    <td>{{ v.address_type }}</td>
+                    <td>
+                        <a href="{% url 'clc:address_update' v.pk %}">
+                            {{ v.firstname }} {{ v.lastname }}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No addresses are available.</p>
+    {% endif %}
+{% endblock %}

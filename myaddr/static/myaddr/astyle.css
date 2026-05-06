@@ -1,0 +1,65 @@
+li a {
+    color: black;
+}
+
+body {
+    /* */
+    background: lightgray;
+}
+
+
+table {
+    border-collapse: collapse;
+    width: auto;
+}
+
+table.test1 {
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: auto
+}
+
+th, td {
+    padding: 0.25rem;
+    text-align: left;
+    border: 1px solid gray;
+}
+
+.calendar {
+    width: 98%;
+    margin: auto;
+    font-size: 13px;
+}
+
+.calendar tr, .calendar td {
+    border: 1px solid black;
+}
+
+.calendar th {
+    padding: 10px;
+    text-align: center;
+    font-size: 18px;
+}
+
+.calendar td {
+    width: 200px;
+    height: 150px;
+    padding: 20px 0 0 5px;
+}
+
+.month {
+    font-size: 25px;
+}
+
+.date {
+    font-size: 16px;
+}
+
+ul {
+    height: 100%;
+    padding: 0 5px 0 20px;
+}
+
+a {
+    color: #17a2b8;
+}	

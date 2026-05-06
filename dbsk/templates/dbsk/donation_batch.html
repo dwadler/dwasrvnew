@@ -1,0 +1,41 @@
+{% extends "dbsk/base.html" %}
+
+{% block sidebar %}{% endblock %}
+{% block content %}
+    <h2>Donation Batch - {{ batch_date }}</h2>
+    <style>
+
+    </style>
+    <button onclick="window.print()">Print</button>
+    <a href="{% url 'dbsk:donation_menu' %}">Return to donation menu</a>
+    {% if object_list %}
+        <table class="condensed">
+            {% for v in object_list %}
+                <tr>
+                    <td class="condensed">
+                        <a href="{% url 'dbsk:donation_update' v.pk %}">
+                            {{ v.first_name }} {{ v.last_name }}
+                        </a>
+                        {% if v.addr1 %} <br>{{ v.addr1 }} {% endif %}
+                        {% if v.addr2 %} <br>{{ v.addr2 }} {% endif %}
+                        {% if v.city %} <br>{{ v.city }}, {{ v.state }} {{ v.zip }} {% endif %}
+                    </td>
+                    <td class="condensed">
+                        {{ v.amount }}
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td class="condensed">
+                    Total:
+                </td>
+                <td class="condensed">
+                    {{ batch_total }}
+                </td>
+            </tr>
+
+        </table
+    {% else %}
+        <p>No Donors are available.</p>
+    {% endif %}
+{% endblock %}

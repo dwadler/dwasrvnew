@@ -1,0 +1,36 @@
+{% extends "dbsk/base.html" %}
+
+{% block sidebar %}{% endblock %}
+
+{% block content %}
+
+    <h3>Volunteer detail</h3>
+
+    <form method="POST" class="form-horizontal">{% csrf_token %}
+
+        <p>Values for Availability:
+        <ul>
+            <li>X - not available</li>
+            <li>W - available Wednesday</li>
+            <li>-W - not available Wednesday (precede with minus sign)
+            <li>1W - available first Wednesday</li>
+            <li>1W,3F - available first Wednesday, third Friday>
+            <li>Follow pattern above for other days and combinations</li>
+            </p>
+            <input type="submit" value="Submit">
+            <a href="{% url 'dbsk:volunteer_list' %}">Cancel</a>
+            <table border="1">
+
+                {{ form.as_table }}
+            </table>
+
+    </form>
+
+    {% if object.pk %}
+        <form method="GET" action="{% url 'dbsk:delete_volunteer' object.pk %}">
+            {% csrf_token %}
+            <input type="submit" class="btn btn-sm btn-danger" value="delete"></input>
+        </form>
+    {% endif %}
+
+{% endblock %}

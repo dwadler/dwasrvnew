@@ -1,0 +1,15 @@
+{% extends "energy/base.html" %}
+
+{% block sidebar %}{% endblock %}
+{% block content %}
+    <ul>
+        <li><a href="{% url 'energy:electrical_list' %}">Electrical data</a></li>
+        <li><a href="{% url 'energy:energy_data' %}">Energy data</a></li>
+        <li><a href="{% url 'energy:chart' %}">Energy chart for month</a></li>
+        <li><a href="{% url 'energy:energy_data_month' %}">Energy chart summary</a></li>
+        <li><a href="{% url 'energy:solar_max_month' %}">Solar max summary</a></li>
+        <li><a href="{% url 'energy:ev6_list' %}">EV6 data</a></li>
+        <li><a href="{% url 'energy:ev6mpg_list' %}">EV6 data MPG</a></li>
+
+    </ul>
+{% endblock %}

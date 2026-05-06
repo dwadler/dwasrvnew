@@ -1,0 +1,10 @@
+{% extends "riverby/base.html" %}
+
+{% block sidebar %}{% endblock %}
+{% block content %}
+    <ul>
+        <li><a href="{% url 'riverby:rhha_list' %}">Rhha database</a></li>
+        <li><a href="{% url 'riverby:export_rhha' %}">Export RHHA addresses</a></li>
+        <li><a href="{% url 'riverby:address_list' %}">All Riverby database</a></li>
+    </ul>
+{% endblock %}

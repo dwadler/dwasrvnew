@@ -1,0 +1,26 @@
+{% extends "myaddr/base.html" %}
+
+{% block sidebar %}{% endblock %}
+{% block content %}
+
+    <h2><a href="{% url 'myaddr:index' %}">Return to main menu</a>
+    </h2>
+    <h2><a href="{% url 'myaddr:movie_create' %}">Create a movie entry</a>
+    <h2>
+    <table class="table table-striped">
+        <th>Date</th>
+        <th>Service</th>
+        <th>Name</th>
+        <th>Notes</th>
+        {% for object in object_list %}
+            <tr>
+                <td>{{ object.date }}</td>
+                <td>{{ object.service }}</td>
+                <td><a href="{% url 'myaddr:movie_update' object.pk %}">{{ object.name }}</td>
+                <td>{{ object.notes }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "energy/base.html" %}
+
+{% block sidebar %}{% endblock %}
+
+{% block content %}
+    <h2><a href="{% url 'energy:index' %}">Return to main menu</a></h2>
+    <a href="{% url 'energy:electrical_create' %}">Create an energy entry</a>
+
+    <table class="table table-striped">
+        <tr>
+            <th>Id</th>
+            <th>Date</th>
+            <th>Meter reading</th>
+            <th>kWh net</th>
+            <th>kWh billed</th>
+            <th>Solar balance</th>
+            <th>Cost</th>
+            <th>Cost / kWh0</th>
+        </tr>
+        {% for object in object_list %}
+            <tr>
+                <td>{{ object.id }}</td>
+                <td><a href="{% url 'energy:electrical_update' object.id %}">{{ object.date }}</a></td>
+                <td>{{ object.meter_reading }}</td>
+                <td>{{ object.kwh_net }}</td>
+                <td>{{ object.kwh }}</td>
+                <td>{{ object.solar_balance }}</td>
+                <td>{{ object.ch_total }}</td>
+                <td>{{ object.kwh_cost }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}

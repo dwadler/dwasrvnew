@@ -1,0 +1,35 @@
+{% extends "dbsk/base.html" %}
+
+{% block sidebar %}{% endblock %}
+
+{% block content %}
+
+    <h3>Donor detail</h3>
+    {% if donations %}
+        <b>Donations:</b>
+        <ul>
+            {% for donation in donations %}
+                <li>{{ donation }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    </p>
+    <form method="POST" class="form-horizontal">{% csrf_token %}
+
+        <input type="submit" value="Submit">
+        <a href="{% url 'dbsk:donor_list' %}">Cancel</a>
+        <table border="1" class="table table-condensed" style="width:50%">
+
+            {{ form.as_table }}
+        </table>
+
+    </form>
+
+    {% if object.pk %}
+        <form method="GET" action="{% url 'dbsk:delete_donor' object.pk %}">
+            {% csrf_token %}
+            <input type="submit" class="btn btn-sm btn-danger" value="delete"></input>
+        </form>
+    {% endif %}
+
+{% endblock %}

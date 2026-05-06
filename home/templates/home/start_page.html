@@ -1,0 +1,19 @@
+{% extends "home/base.html" %}
+
+{% block content %}
+
+    <ul>
+        <li><a href="{% url 'myaddr:index' %}">Adler Addresses</a></li>
+        <li><a href="{% url 'energy:index' %}">Energy Database</a></li>
+
+
+        <li><a href="{% url 'giving:index' %}">CLC Giving Database</a></li>
+
+        <li><a href="{% url 'clc:index' %}">CLC Address Database</a></li>
+
+        <li><a href="{% url 'dbsk:index' %}">DBSK Database</a></li>
+
+        <li><a href="{% url 'riverby:index' %}">Riverby Database</a></li>
+
+    </ul>
+{% endblock %}

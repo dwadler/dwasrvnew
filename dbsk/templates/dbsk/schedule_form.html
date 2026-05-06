@@ -1,0 +1,14 @@
+{% extends "dbsk/base.html" %}
+
+
+{% block sidebar %}{% endblock %}
+{% block content %}
+    <h2>Schedule for {{ date_string }}</h2>
+    <form method="post">{% csrf_token %}
+        <input type="submit" value="Submit">
+        <a href="{% url 'dbsk:schedule' %}?{{ schedule_month }}">Cancel</a>
+
+        {{ form.as_p }}
+
+    </form>
+{% endblock %}

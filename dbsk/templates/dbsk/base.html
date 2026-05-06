@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'dbsk/astyle.css' %}">
+    <!--
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+      -->
+    <title>{% block title %}DBSK Database{% endblock %}</title>
+    {% block headstuff %}
+    {% endblock %}
+</head>
+
+<body>
+<h1 class="center">Christ's Lutheran Church</br>Daily Bread Soup Kitchen</h1>
+{% if request.user.is_authenticated %}
+    <h2>Logged in as {{ request.user.first_name }} {{ request.user.last_name }}</h2>
+{% endif %}
+<div id="sidebar">
+    {% block sidebar %}
+
+    {% endblock %}
+</div>
+
+<div id="content">
+    {% block content %}{% endblock %}
+</div>
+</body>
+</html>

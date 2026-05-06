@@ -1,0 +1,42 @@
+{% extends "dbsk/base.html" %}
+
+{% block sidebar %}{% endblock %}
+{% block content %}
+    <h2>Volunteer Listing</h2>
+    <p>
+        Click on a name in the list to edit or see the details. Click
+        <a href="{% url 'dbsk:volunteer_create' %}"> Add Volunteer </a>
+        to add a new volunteer
+    </p>
+    <p>
+        <a href="{% url 'dbsk:export_volunteers_csv' %}"> Export </a>Volunteers as spreadsheet
+    </p>
+    <p>
+        <a href="{% url 'dbsk:export_volunteers_docx' %}"> Export </a>Volunteers as Word document
+    </p>
+    {% if object_list %}
+        <table border="1">
+            {% for v in object_list %}
+                <tr>
+                <td>
+                    <a href="{% url 'dbsk:volunteer_update' v.pk %}">
+                        {{ v.firstname }} {{ v.lastname }}
+                    </a>
+                    {% if v.addr1 %} <br>{{ v.addr1 }} {% endif %}
+                    {% if v.addr2 %} <br>{{ v.addr2 }} {% endif %}
+                    {% if v.city %} <br>{{ v.city }}, {{ v.state }} {{ v.zip }} {% endif %}
+
+                </td>
+                <td>
+                    {{ v.phone1 }}
+                    {% if v.phone2 %} <br>{{ v.phone2 }} {% endif %}
+                    {% if v.email %} <br>{{ v.email }} {% endif %}
+                    {% if v.availability %} <br>Availability: {{ v.availability }} {% endif %}
+                    {% if v.notes %} <br>Notes: {{ v.notes }} {% endif %}
+                </td>
+            {% endfor %}
+        </table
+    {% else %}
+        <p>No volunteers are available.</p>
+    {% endif %}
+{% endblock %}

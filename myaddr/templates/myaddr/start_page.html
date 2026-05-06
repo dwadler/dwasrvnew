@@ -1,0 +1,14 @@
+{% extends "myaddr/base.html" %}
+
+{% block sidebar %}{% endblock %}
+{% block content %}
+    <ul>
+        <li><a href="{% url 'myaddr:movie_list' %}">Movies</a></li>
+        <li><a href="{% url 'myaddr:myaddr_list' %}">Adler database</a></li>
+        <li><a href="{% url 'myaddr:export_all' %}">Export all</a></li>
+        <li><a href="{% url 'myaddr:export_xmas' %}">Export Christmas list</a></li>
+        <li><a href="{% url 'myaddr:export_status' %}">Export addresses where status='Y'</a></li>
+        <li><a href="{% url 'myaddr:logout' %}">Logout</a></li>
+
+    </ul>
+{% endblock %}

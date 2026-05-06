@@ -1,0 +1,37 @@
+{% load static %}
+<head>
+
+
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/responsive.css">
+    <head>
+        <form method="POST" class="form-horizontal">{% csrf_token %}
+
+            {{ form.non_field_errors }}
+
+
+            <p>
+                Date Scheduled:
+                {{ form.schedule_date }}
+            </p>
+            <p>
+
+            <p>
+                Provider
+                {{ form.provider }}
+            </p>
+            <p>
+                volunteer1
+                {{ form.volunteer1 }}
+            </p>
+            <p>
+                Volunteer2
+                {{ form.volunteer2 }}
+            </p>
+            <p>
+                Next provider
+                {{ form.provider_next }}
+            </p>
+
+            <input type="submit" value="Submit">
+        </form>

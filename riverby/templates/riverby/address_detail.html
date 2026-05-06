@@ -1,0 +1,26 @@
+
+
+{% extends "riverby/base.html" %}
+
+{% block sidebar %}{% endblock %}
+
+{% block content %}
+    <h1>Update address</h1>
+    <h1>id: {{ object.id }} {{ object.lastname }}</h1>
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+    <a href="{% url 'riverby:address_list' %}">Cancel</a>
+
+
+    <table>
+        {{ object }}
+    </table>
+
+
+    {% if object.pk %}
+        <form method="GET" action="{% url 'riverby:address_delete' object.pk %}">
+            {% csrf_token %}
+            <input type="submit" class="btn btn-sm btn-danger" value="Delete"></input>
+        </form>
+    {% endif %}
+
+{% endblock %}

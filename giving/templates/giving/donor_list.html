@@ -1,0 +1,30 @@
+{% extends "giving/base.html" %}
+
+{% block sidebar %}{% endblock %}
+{% block content %}
+    <h2>Donor Listing</h2>
+
+    <p>
+        <a href="{% url 'giving:donor_create' %}">Create a new donor</a>
+    </p>
+    <p>
+        <a href="{% url 'giving:index' %}">Return to donation menu</a>
+    </p>
+
+    {% if object_list %}
+        <table border="1">
+            {% for v in object_list %}
+                <tr>
+                <td>{{ v.envelopeno }}</td>
+                <td>{{ v.first_name }} {{ v.last_name }}</td>
+                <td><a href="{% url 'giving:donation_create' %}?donor_id={{ v.id }}">Add donation
+                </a></td>
+                <td><a href="{% url 'giving:donor_update' v.pk %}">Edit donor
+                </a></td>
+
+            {% endfor %}
+        </table
+    {% else %}
+        <p>No Donors are available.</p>
+    {% endif %}
+{% endblock %}

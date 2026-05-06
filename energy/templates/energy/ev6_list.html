@@ -1,0 +1,35 @@
+{% extends "energy/base.html" %}
+
+{% block sidebar %}{% endblock %}
+
+{% block content %}
+<h2><a href="{% url 'energy:index' %}">Return to main menu</a></h2>
+    <a href="{% url 'energy:ev6_create' %}">Create an energy entry</a>
+    <br>
+    <a href="{% url 'energy:ev6mpg_list' %}">EV6 mpg</a>
+
+    <table class="table table.condensed">
+        <tr>
+            <th>Id</th>
+            <th>Date</th>
+            <th>Odometer</th>
+            <th>New Miles</th>
+            <th>kWh</th>
+            <th>Full Charge</th>
+            <th>location</th>
+        </tr>
+        {% for object in object_list %}
+            <tr>
+                <td>{{ object.id }}</td>
+                <td><a href="{% url 'energy:ev6_update' object.pk %}"></a>{{ object.date }}</td>
+                <td>{{ object.odometer }}</td>
+                <td>{{ object.new_miles }}</td>
+                <td>{{ object.kwh }}</td>
+                <td>{{ object.full_charge }}</td>
+                <td>{{ object.location }}</td>
+            </tr>
+        {% endfor %}
+    </table></s>
+
+
+{% endblock %}

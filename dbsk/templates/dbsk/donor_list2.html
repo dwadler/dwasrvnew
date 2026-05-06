@@ -1,0 +1,39 @@
+{% extends "dbsk/base.html" %}
+
+{% block sidebar %}{% endblock %}
+{% block content %}
+    <h2>Add donation for donor</h2>
+    <a href="{% url 'dbsk:donation_menu' %}">Return to donation menu</a>
+    <p>
+        Start typing a name to list donors.
+
+    </p>
+    <p id="donorForm" data-donors-url="{% url 'dbsk:ajax_load_donors' %}"></p>
+
+    <p><label for="id_prefix">Name: </label><input type="text" name="prefix" id="id_prefix" autocomplete="off">
+        <a href="{% url 'dbsk:donor_create' %}"> Add Donor </a>
+
+    </p>
+    <p>Select a name:</p>
+    <ul id="id_donor">
+
+    </ul>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        $("#id_prefix").keyup(function () {
+            var url = $("#donorForm").attr("data-donors-url");
+            var prefix = $(this).val();
+
+            $.ajax({
+                url: url,
+                data: {
+                    'prefix': prefix
+                },
+                success: function (data) {
+                    $("#id_donor").html(data);
+                }
+            });
+
+        });
+    </script>
+{% endblock %}

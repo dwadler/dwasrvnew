@@ -1,0 +1,42 @@
+{% extends "dbsk/base.html" %}
+
+{% block sidebar %}{% endblock %}
+{% block content %}
+    <h2>Donor Listing</h2>
+
+    <form method="GET" action="{% url 'dbsk:donor_list' %}">
+        {% csrf_token %}
+        <input type="radio" name="filter" value="Y" checked> Active<br>
+        <input type="radio" name="filter" value="N"> All<br>
+        <p><label for="name_filter">List last name starts with:</label> <input type="text" value="{{ name_filter }}"
+                                                                               name="name_filter" maxlength="40"
+                                                                               id="id_city"></p>
+        <input type="submit" class="btn btn-sm btn-danger" value="refresh"></input>
+    </form>
+    <a href="{% url 'dbsk:donation_menu' %}">Return to donation menu</a>
+    <p>
+        Click on a name in the list to edit or see the details. Click
+        <a href="{% url 'dbsk:donor_create' %}"> Add Donor </a>
+        to add a new Donor
+    </p>
+
+    {% if object_list %}
+        <table border="1">
+            {% for v in object_list %}
+                <tr>
+                <td>
+                    <a href="{% url 'dbsk:donor_update' v.pk %}">
+                        {{ v.first_name }} {{ v.last_name }}
+                    </a>
+                    {% if v.addr1 %} <br>{{ v.addr1 }} {% endif %}
+                    {% if v.addr2 %} <br>{{ v.addr2 }} {% endif %}
+                    {% if v.city %} <br>{{ v.city }}, {{ v.state }} {{ v.zip }} {% endif %}
+
+                </td>
+
+            {% endfor %}
+        </table
+    {% else %}
+        <p>No Donors are available.</p>
+    {% endif %}
+{% endblock %}

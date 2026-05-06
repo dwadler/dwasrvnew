@@ -1,0 +1,25 @@
+{% extends "dbsk/base.html" %}
+
+{% block sidebar %}{% endblock %}
+{% block content %}
+    <h2>Volunteer Listing</h2>
+    <p>
+        Click on a name in the list to edit or see the details. Click
+        <a href="{% url 'dbsk:volunteer_create' %}"> Add Volunteer </a>
+        to add a new volunteer
+    </p>
+    <p>
+        <a href="{% url 'dbsk:export_volunteers_csv' %}"> Export </a>Volunteers as spreadsheet
+    </p>
+    <p>
+        <a href="{% url 'dbsk:export_volunteers_docx' %}"> Export </a>Volunteers as Word document
+    </p>
+    {% if object_list %}
+
+        {% for object in object_list %}
+            <p><a href="{% url 'dbsk:volunteer_update' object.pk %}">{{ object }}</a></p>
+        {% endfor %}
+    {% else %}
+        <p>No volunteers are available.</p>
+    {% endif %}
+{% endblock %}

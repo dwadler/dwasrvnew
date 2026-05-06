@@ -1,0 +1,30 @@
+{% extends "dbsk/base.html" %}
+
+{% block sidebar %}{% endblock %}
+{% block content %}
+    <h2>Volunteer Report on {{ timenow }}</h2>
+    <div>
+        <a href="{% url 'dbsk:index' %}">Return to main menu</a>
+    </div>
+    <form method="POST" class="form-horizontal">{% csrf_token %}
+        {{ form }}
+        <p></p>
+        <input type="submit" value="Submit">
+    </form>
+    <p></p>
+    {% if messages %}
+        <table border="1">
+            {% for m in messages %}
+
+                <tr>
+                    {% for m0 in m %}
+                        <td>{{ m0 }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table
+    {% else %}
+        <p>No messages are available.</p>
+    {% endif %}
+
+{% endblock %}

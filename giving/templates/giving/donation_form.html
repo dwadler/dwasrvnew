@@ -1,0 +1,47 @@
+{% extends "giving/base.html" %}
+
+{% block sidebar %}{% endblock %}
+
+{% block content %}
+
+    <b>Add a donation for:
+    </b>
+    <br>{{ donor }}
+    <br>{{ donor.addr1 }}
+    {% if donor.addr2 %} <br>{{ donor.addr2 }} {% endif %}
+    <br>{{ donor.city }}, {{ donor.state }} {{ donor.zip }}
+
+    <form method="POST" class="form-horizontal">{% csrf_token %}
+
+
+
+        <a href="{% url 'giving:donate_list' %}">Cancel</a>
+     <input type="submit" value="Submit">
+            {% for hidden in form.hidden_fields %}
+              {{ hidden }}
+            {% endfor %}
+        <table border="1" class="table table-condensed">
+
+            {{ form.as_table }}
+        </table>
+
+    </form>
+    <p>
+
+        {% if donations %}
+            <b>Prior donations:</b>
+            <ul>
+                {% for donation in donations %}
+                    <li>{{ donation }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+    {% if object.pk %}
+        <form method="GET" action="{% url 'giving:donation_delete' object.pk %}">
+            {% csrf_token %}
+            <input type="submit" class="btn btn-sm btn-danger" value="delete"></input>
+        </form>
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "dbsk/base.html" %}
+
+{% block sidebar %}{% endblock %}
+{% block content %}
+
+    {% if schedule_list %}
+        <div>
+            <table border="1">
+                <tr>
+                    <th>Date</th>
+                    <th>Provider</th>
+                    <th>Delete</th>
+                </tr>
+                {% for schedule in schedule_list %}
+                    <tr>
+
+                        <td><a href="{% url 'dbsk:schedule_update' schedule.pk %}">{{ schedule.schedule_date }}</td>
+                        <td>
+                            <table border="1">
+                                <tr>
+                                    <td>
+                                        Provider: {{ schedule.provider }} </td>
+                                    <td> {{ schedule.provider.phone1 }}
+                                    </td>
+                                </tr>
+                    </tr>
+                    <td>
+                        <br>Volunteer1: {{ schedule.volunteer1 }} </td>
+                    <td>  {{ schedule.volunteer1.phone1 }}
+                    </td>
+                    </tr>
+                    </tr>
+                    <td>
+                        <br>Volunteer2: {{ schedule.volunteer2 }} </td>
+                    <td>  {{ schedule.volunteer1.phone1 }}
+                    </td>
+                    </tr>
+                    </tr>
+                    <td>
+                        <br>Next provider: {{ schedule.provider_next }} </td>
+                    <td> {{ schedule.provider_next.phone1 }}
+                    </td>
+                    </tr>
+                    </table>
+                    <td>
+                        <form method="GET" action="{% url 'dbsk:delete_schedule' schedule.pk %}">
+                            {% csrf_token %}
+                            <input type="submit" class="btn btn-sm btn-danger" value="delete"></input>
+                        </form>
+                    </td>
+                    </tr>
+                {% endfor %}
+            </table
+        </div>
+    {% else %}
+        <p>No schedules are available.</p>
+    {% endif %}
+{% endblock %}

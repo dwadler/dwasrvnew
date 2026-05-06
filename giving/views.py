@@ -1,0 +1,434 @@
+import csv
+from datetime import datetime
+
+from django.contrib import messages
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+from django.db.models import Max
+from django.http import HttpResponse
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.list import ListView
+
+from home.dwaclasses import DwaCommon
+from .forms import DonorForm, DonationForm
+from .models import Donor, Donation
+
+
+def start_page(request):
+    return render(request, 'giving/start_page.html')
+
+
+@login_required
+def login(request):
+    return render(request, 'giving/start_page.html')
+
+
+def logout_request(request):
+    logout(request)
+    messages.info(request, "Logged out")
+    print(f"*** logout **** request: {request}")
+    return render(request, 'giving/start_page.html')
+
+
+def test1(request):
+    print(f"test: {request=}")
+    objs = Donation.objects.all().filter(id__gte=1056).order_by('-batch')
+
+    #    print(f"{objs=}")
+    for obj in objs:
+
+        obj.processed_date = obj.processed_date.replace(year=2026)
+        obj.save()
+        print(f"{obj=}")
+    return render(request, 'giving/start_page.html')
+
+
+def donation_batch_save(request):
+    batch = request.GET.get('batch')
+    print(f"\n*** donation_batch_save;  request.GET: {request.GET}; batch: {batch}")
+    Donation.objects.all().filter(batch__isnull=True).update(batch=batch)
+    return render(request, 'giving/start_page.html')
+
+
+def export_donations(request):
+    print(f"\n*** export_donations ***")
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="donations.csv"'
+
+    writer = csv.writer(response)
+    columns = ['id', 'processed_date', 'envelopeno', 'first_name', 'last_name', 'amount', 'special_amount', 'occasion']
+    writer.writerow(columns)
+    donations = Donation.objects.all().order_by('id').filter(processed_date__gte=datetime(2026, 1, 1))
+    for donation in donations:
+        donor = donation.donor
+        row = [donation.id, donation.processed_date, donor.envelopeno, donor.first_name, donor.last_name]
+        row.extend([donation.amount, donation.special_amount, donation.occasion])
+        writer.writerow(row)
+    return response
+
+
+def export_donation_summary(request):
+    print(f"\n*** export_donation_summary ***")
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="donation_summary.csv"'
+
+    writer = csv.writer(response)
+    columns = ['envelopeno', 'first_name', 'last_name', 'total', 'amount', 'special_amount']
+    writer.writerow(columns)
+    donors = Donor.objects.all().order_by('last_name')
+    for donor in donors:
+        #        print(f"{donor}")
+        donations = Donation.objects.all().filter(donor=donor, processed_date__gte=datetime(2026, 1, 1))
+        total_amount = 0
+        total_special = 0
+        for donation in donations:
+            #            print(f"{donation=}")
+            total_amount += donation.amount
+            total_special += donation.special_amount
+        total_total = total_amount + total_special
+        row = [donor.envelopeno, donor.first_name, donor.last_name, total_total, total_amount, total_special]
+        print(f"export_donation_summary: {row}")
+        writer.writerow(row)
+    return response
+
+
+def export_donation_summary_yr(request):
+    print(f"\n*** export_donation_summary ***")
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="donation_summary_by_year.csv"'
+
+    writer = csv.writer(response)
+    columns = ['envelopeno', 'first_name', 'last_name', '2023', '2024', '2025', '2026']
+    writer.writerow(columns)
+    donors = Donor.objects.all().order_by('-active', 'last_name')
+    years = [2023, 2024, 2025, 2026]
+    for donor in donors:
+        #        print(f"{donor}")
+        donations = Donation.objects.all().filter(donor=donor, processed_date__gte=datetime(2023, 1, 1))
+        year_total = [0, 0, 0, 0]
+        for donation in donations:
+            year = donation.processed_date.year
+            #            print(f"{donation=}")
+            year_total[year - 2023] += int(donation.amount + donation.special_amount)
+        row = [donor.envelopeno, donor.first_name, donor.last_name,
+               year_total[0], year_total[1], year_total[2], year_total[3], ]
+        print(f"export_donation_summary: {row}")
+        writer.writerow(row)
+    return response
+
+
+class DonationCreateView(DwaCommon, CreateView):
+    model = Donation
+    form_class = DonationForm
+
+    def get(self, request):
+        donor_id = request.GET.get('donor_id')
+        test_form = DonationForm(request.GET)
+        print(f'*** DonationCreateView:get test_form.data1: {test_form.data}')
+        processed_date = request.session.get('processed_date', '2026-01-01')
+        test_form = DonationForm(
+            data={'donor_id': donor_id, 'processed_date': processed_date})  # same effect, can set other fields
+        print(f'*** DonationCreateView:get test_form.data2: {test_form.data}')
+        donor = Donor.objects.get(pk=donor_id)
+        print(f'*** DonationCreateView:get donor {donor}')
+        test_form.is_valid()
+        form = DonationForm(initial=test_form.cleaned_data)
+        # Get previous donations
+        donations = Donation.objects.filter(donor_id=donor_id, processed_date__gte=datetime(2024, 1, 1)).order_by(
+            'processed_date')
+        print(f'*** DonationCreateView:get got donations')
+        for donation in donations:
+            print(f'*** DonationCreateView:get donation {donation}')
+        print(f'*** DonationCreateView:get donations {donations}')
+        return render(request, 'giving/donation_form.html', {'form': form,
+                                                             'donor': donor, 'donations': donations})
+
+    def form_valid(self, form):
+        print("*** DonationCreateView:form_valid enter")
+        cleaned_data = form.cleaned_data
+        donor_id = cleaned_data['donor_id']
+        model = form.save(commit=False)
+        donor = Donor.objects.filter(pk=donor_id)[0]
+        model.donor = donor
+        request = self.request
+        processed_date = model.processed_date.strftime('%Y-%m-%d')
+        print(f"*** DonationCreateView:form_valid  date: {processed_date}; request: '{request}'")
+        request.session['processed_date'] = processed_date
+        if model.special_amount is None:
+            model.special_amount = 0.0
+        print(f"type(model): {type(model)}")
+        return self.dwa_form_valid_save_model(form, model)
+
+
+class DonationUpdateView(DwaCommon, UpdateView):
+    model = Donation
+    form_class = DonationForm
+
+    def get(self, request, *args, **kwargs):
+        donor_id = request.GET.get('donor_id')
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        print(f" ******** in DonationUpdateView::get_context_data; context: {context}")
+        donation = context['donation']
+        donor_id = donation.donor_id
+        print(f" ******** in DonationUpdateView::get_context_data; donor_id: {donor_id}")
+        donor = Donor.objects.get(pk=donor_id)
+        context['donor'] = donor
+        print(f"**** DonationUpdateView::get_context_data;context: {context}")
+        return context
+
+    def form_valid(self, form):
+        print("*** DonationUpdateView:form_valid enter")
+        print(f"*** DonationUpdateView:form_valid enter; request: {self.request.path}")
+        model = form.save(commit=False)
+        if model.special_amount is None:
+            model.special_amount = 0.0
+        return self.dwa_form_valid_save_model(form, model)
+
+
+class DonationDeleteView(DwaCommon, DeleteView):
+    model = Donation
+    success_url = reverse_lazy('giving:index')
+
+
+class DonationList(ListView):
+    model = Donor
+    template_name = 'giving/donation_batch.html'
+    context_object_name = 'object_list'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        print(f" ******** in DonationBatch::get_context_data; context: {context}")
+        objects = context['object_list']
+        print(f" ******** in DonationBatch::get_context_data; list: {objects}")
+
+        return context
+
+    def get_queryset(self):
+        """Return the address objects."""
+        object_list = Donor.objects.all().order_by('-active', 'last_name')
+        print(f"*****DonationBatch::get_queryset - {object_list}")
+        print(f"*****DonationBatch::get_queryset - self.model - {self.model}")
+        return object_list
+
+
+class DonationBatch(ListView):
+    template_name = 'giving/donation_batch.html'
+    context_object_name = 'object_list'
+
+    def render_to_response(self, context, **kwargs):
+        print(f"\n*** DonationBatch::render_to_response;  context: {context}; new_batch: {self.new_batch}")
+        return super().render_to_response(context)
+
+    def get(self, request):
+        batch = request.GET.get('batch')
+        print(f"\n*** DonationBatch::get;  request.GET: {request.GET}; batch: {batch}")
+        if batch == "None":
+            batch = None
+        self.batch = batch
+        return super().get(request)
+
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+        print(f"\n*** DonationBatch::get_context_data; context: {context}")
+        objects = context['object_list']
+        print(f"*** DonationBatch::get_context_data; list: {objects}")
+        if not objects:
+            print(f"*** DonationBatch::get_context_data; no objects in batch")
+            return context
+        batch = self.batch
+        if batch is None:
+            max_batch = Donation.objects.aggregate(Max('batch'))['batch__max']
+            print(f"*** DonationBatch::get_context_data; max_batch: {max_batch}")
+            if max_batch is None: max_batch = 0
+            batch = max_batch + 1
+        self.batch = batch
+        batch_total = 0
+        batch_amount = 0
+        batch_special = 0
+        batch_date = datetime.now().isoformat()
+        for obj in objects:
+            obj.name = 'fred'
+            donor = obj.donor
+            obj.name = f"{donor}"
+            amount = obj.amount
+            print(f"*** DonationBatch::get_context_data; amount: {amount}; {obj.special_amount}; {obj.occasion}")
+            batch_amount = batch_amount + amount
+            batch_special = batch_special + obj.special_amount
+            batch_date = obj.processed_date
+        print(f"*** DonationBatch::get_context_data; batch_total: {batch_total}; set batch={batch}")
+        batch_total = batch_amount + batch_special
+        context['batch'] = batch
+        context['batch_total'] = batch_total
+        context['batch_amount'] = batch_amount
+        context['batch_special'] = batch_special
+        context['batch_date'] = batch_date.date()
+        return context
+
+    def get_queryset(self):
+        batch = self.batch
+        print(f"\n*** DonationBatch::get_queryset; batch: {batch}")
+        if batch is None:
+            self.new_batch = True
+            object_list = Donation.objects.all().filter(batch__isnull=True)
+        #            sql = str(Donation.objects.all().filter(batch__isnull=True).query)
+        else:
+            self.new_batch = False
+            object_list = Donation.objects.all().filter(batch=batch)
+        #           sql = str(Donation.objects.all().order_by('last_name').filter(batch = batch).query)
+
+        #        print(f"***DonationBatch::get_queryset - {object_list}")
+        #        print(f"***DonationBatch::get_queryset - sql - {sql}")
+        for obj in object_list:
+            print(f"{obj=}")
+        return object_list
+
+    def form_validx(self, form):
+        print("*** DonationBatch:form_valid enter")
+        print(f"*** DonationBatch:form_valid enter; request: {self.request.path} {form}")
+        return
+
+
+class DonationBatchStruct:
+    number = 0
+    date = 0
+    count = 0
+    amount = 0
+
+    def __init__(self, number, date, count, amount):
+        self.number = number
+        self.date = date
+        self.count = count
+        self.amount = amount
+
+    def __str__(self):
+        list_representation = ("Batch#: %s date#: %s count: %s amount: %s" \
+                               % (self.number
+                                      , self.date
+                                      , self.count
+                                      , self.amount))
+        return list_representation
+
+
+class DonationBatchList(ListView):
+    template_name = 'giving/donation_batch_list.html'
+    context_object_name = 'object_list'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        objects = context['object_list']
+        max_batch = Donation.objects.aggregate(Max('batch'))  # ['batch__max']
+        print(f" ******** in DonationBatchList::get_context_data; max_batch: {max_batch}")
+        return context
+
+    def get_queryset(self):
+        objects = Donation.objects.all().filter(processed_date__gte=datetime(2025, 1, 1)).order_by('-batch')
+        object_list = []
+        count = 0
+        lastBatchNumber = -999
+        batchTotalAmount = 0
+        for obj in objects:
+            batchNumber = obj.batch
+            if batchNumber != lastBatchNumber and lastBatchNumber != -999:
+                batch = DonationBatchStruct(lastBatchNumber, lastBatchDate.date(), count, batchTotalAmount)
+                object_list.append(batch)
+                print(f" ******** in DonationBatchList::get_queryset;  {batch}")
+                batchTotalAmount = 0
+                count = 0
+                lastBatchNumber = batchNumber
+            batchTotalAmount = batchTotalAmount + obj.amount + obj.special_amount
+            count += 1
+            lastBatchNumber = batchNumber
+            lastBatchDate = obj.processed_date
+        # handle final batch
+        batch = DonationBatchStruct(lastBatchNumber, lastBatchDate.date(), count, batchTotalAmount)
+        object_list.append(batch)
+        print(f" ******** in DonationBatchList::get_queryset;  {batch}")
+        return object_list
+
+
+class DonorCreateView(DwaCommon, CreateView):
+    model = Donor
+    form_class = DonorForm
+
+
+class DonorUpdateView(DwaCommon, UpdateView):
+    model = Donor
+    form_class = DonorForm
+
+    def get_context_data(self, **kwargs):
+        """return context data"""
+        print("\n\n*** DonorUpdateView:get_context_data")
+        context = super(DonorUpdateView, self).get_context_data(**kwargs)
+        print(f"{context}")
+        form = context['form']
+        print(f"{form=}")
+        result = form.is_valid()
+        print(f"{result}")
+        donor = context['donor']
+
+        donations = Donation.objects.filter(donor=donor).order_by('-processed_date')
+        total_amount = 0
+        total_special = 0
+        for donation in donations:
+            donation.processed_date = donation.processed_date.date()  # get rid of minutes
+            total_amount += donation.amount
+            total_special += donation.special_amount
+        #            print(f"{donation.amount=}; {total_amount=}; {total_special=}")
+        total = total_amount + total_special
+        # add some final extra info for the template
+        context['donations'] = donations
+        context['total'] = f"{total}"
+        context['total_amount'] = f"{total_amount}"
+        context['total_special'] = f"{total_special}"
+        print(f"{context=}")
+        return context
+
+    def form_valid(self, form):
+        print(f"*** DonorUpdateView:form_valid; form: {form.cleaned_data}")
+        return self.dwa_form_valid_save(form)
+
+
+class DonorDeleteView(DeleteView):
+    model = Donor
+    success_url = reverse_lazy('giving:donor_list')
+
+
+class DonorList(DwaCommon, ListView):
+    model = Donor
+    template_name = 'giving/donor_list.html'
+    context_object_name = 'object_list'
+
+    def get(self, request, *args, **kwargs):
+        return self.dwa_get_limited(request, *args, **kwargs)
+
+    def get_queryset(self):
+        """Return the address objects."""
+        print(f"*****giving::DonorList::get_queryset - self.model - {self.model}")
+        donors = Donor.objects.all().order_by('-active', 'last_name')
+
+        print(f"*****giving::DonorList::get_queryset - {donors}")
+        for donor in donors:
+            print(
+                f"*****giving::DonorList::get_queryset - donor - env:  {donor.active} {donor.envelopeno} {donor.last_name}")
+        return donors
+
+
+class CreateDonationList(ListView):
+    model = Donor
+    template_name = 'giving/donor_list.html'
+    context_object_name = 'object_list'
+
+    def get_queryset(self):
+        """Return the address objects."""
+        print(f"*****giving::CreateDonationList::get_queryset - self.model - {self.model}")
+        donors = Donor.objects.all().order_by('envelopeno')
+        print(f"*****giving::CreateDonationList::get_queryset - {donors}")
+        for donor in donors:
+            print(f"*****giving::CreateDonationList::get_queryset - donor - env: {donor.envelopeno} {donor.last_name}")
+        return donors

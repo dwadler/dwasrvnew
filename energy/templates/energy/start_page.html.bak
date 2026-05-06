@@ -1,0 +1,11 @@
+{% extends "energy/base.html" %}
+
+{% block sidebar %}{% endblock %}
+{% block content %}
+<ul>
+<li><a href="{% url 'energy:electrical_list' %}">Electrical data</a></li>
+<li><a href="{% url 'energy:energy_data' %}">Energy data</a></li>
+<li><a href="{% url 'energy:ev6_list' %}">EV6 data</a></li>
+
+</ul>
+{% endblock %}

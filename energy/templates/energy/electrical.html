@@ -1,0 +1,27 @@
+
+
+{% extends "energy/base.html" %}
+
+{% block sidebar %}{% endblock %}
+
+{% block content %}
+    <h2><a href="{% url 'energy:index' %}">Return to main menu</a></h2>
+    <h1>Create / update electrical data</h1>
+    <h1>id: {{ object.id }} {{ object.date }}</h1>
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+    <a href="{% url 'energy:electrical_list' %}">Cancel</a>
+
+
+    <table>
+        {{ object }}
+    </table>
+
+
+    {% if object.pk %}
+        <form method="GET" action="{% url 'energy:electrical_delete' object.pk %}">
+            {% csrf_token %}
+            <input type="submit" class="btn btn-sm btn-danger" value="Delete"></input>
+        </form>
+    {% endif %}
+
+{% endblock %}

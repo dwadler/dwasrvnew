@@ -1,0 +1,31 @@
+{% extends "dbsk/base.html" %}
+
+{% block sidebar %}{% endblock %}
+{% block content %}
+
+    <ul>
+        <li><a href="{% url 'dbsk:schedule' %}">List, add or change schedules</a></li>
+        <li><a href="{% url 'dbsk:restaurants' %}">Show restaurant-only schedule</a></li>
+        <li><a href="{% url 'dbsk:sms_allow' %}">Allow SMS</a></li>
+        {% if request.user.is_authenticated %}
+            <li><a href="{% url 'dbsk:volunteer_list' %}">List, add or change volunteers</a></li>
+            <li><a href="{% url 'dbsk:volunteer_report' %}">Volunteer report</a></li>
+            <li><a href="{% url 'dbsk:email_blast' %}">Volunteer email blast</a></li>
+            <li><a href="{% url 'dbsk:provider' %}">List, add or change providers</a></li>
+            <li><a href="{% url 'dbsk:donation_menu' %}">Donation menu</a></li>
+            <li><a href="{% url 'dbsk:provider_schedule_labels' %}">Schedule Provider Labels</a></li>
+            <li><a href="/admin">Admin</a></li>
+            <li><a href="{% url 'dbsk:logout' %}">Logout</a></li>
+        {% else %}
+            <li><a href="{% url 'dbsk:login' %}">Login</a></li>
+        {% endif %}
+
+    </ul>
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

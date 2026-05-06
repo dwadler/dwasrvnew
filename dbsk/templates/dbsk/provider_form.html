@@ -1,0 +1,38 @@
+{% extends "dbsk/base.html" %}
+
+{% block sidebar %}{% endblock %}
+{% block content %}
+
+    <h2>Provider detail</h2>
+
+    <form method="POST" class="form-horizontal">{% csrf_token %}
+
+        <p>Values for Preferred day:
+        <ul>
+            <li>W - available Wednesday</li>
+            <li>1W - available first Wednesday</li>
+            <li>1W,3F - available first Wednesday, third Friday>
+            <li>Follow pattern above for other days and combinations</li>
+        </ul>
+        </p>
+        <p>Values for status:
+        <ul>
+            <li>A - active, available</li>
+            <li>X - do not schedule or non-provider</li>
+        </ul>
+        </p>
+        <input type="submit" value="Submit">
+        <a href="{% url 'dbsk:provider' %}">Cancel</a>
+        <table border="1">
+            {{ form.as_table }}
+        </table>
+
+    </form>
+    </form>
+    {% if object.pk %}
+        <form method="GET" action="{% url 'dbsk:delete_provider' object.pk %}">
+            {% csrf_token %}
+            <input type="submit" class="btn btn-sm btn-danger" value="delete"></input>
+        </form>
+    {% endif %}
+{% endblock %}

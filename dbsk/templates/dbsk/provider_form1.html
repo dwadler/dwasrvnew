@@ -1,0 +1,28 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'dbsk/style.css' %}">
+
+<h1>Provider detail</h1>
+
+<form method="POST" class="form-horizontal">{% csrf_token %}
+
+    <p>Values for Preferred day:
+    <ul>
+        <li>W - available Wednesday</li>
+        <li>1W - available first Wednesday</li>
+        <li>1W,3F - available first Wednesday, third Friday>
+        <li>Follow pattern above for other days and combinations</li>
+        </p>
+        <p>Values for status:
+        <ul>
+            <li>A - active, available</li>
+            <li>X - do not schedule or non-provider</li>
+        </ul>
+        </p>
+        <input type="submit" value="Submit">
+        <a href="{% url 'dbsk:provider_list' %}">Cancel</a>
+        <table border="0">
+            {{ form }}
+        </table>
+
+</form>

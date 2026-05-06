@@ -1,0 +1,72 @@
+{% extends "giving/base.html" %}
+
+{% block sidebar %}{% endblock %}
+
+{% block content %}
+
+    <h3>Donor detail</h3>
+
+    <form method="POST" class="form-horizontal">{% csrf_token %}
+
+        <input type="submit" value="Submit">
+        <a href="{% url 'giving:donor_list' %}">Cancel</a>
+        <table border="1" class="table table-condensed">
+
+            {{ form.as_table }}
+        </table>
+
+    </form>
+    <h3>Donation history</h3>
+    {% if donations %}
+        <table border="1">
+            <tr>
+                <th>Date</th>
+
+                <th>Amount</th>
+                <th>Special amount</th>
+                <th>Occasion</th>
+                {% for v in donations %}
+                    <tr>
+                        <td>
+                            {{ v.processed_date }}
+                        </td>
+                        <td>
+                            {{ v.amount }}
+                        </td>
+                        <td>
+                            {{ v.special_amount }}
+                        </td>
+                        <td>
+                            {{ v.occasion }}
+                        </td>
+                        <td><a href="{% url 'giving:donation_delete' v.pk %}">Delete donation
+                        </a></td>
+                    </tr>
+                {% endfor %}
+            <tr>
+                <td>
+                    Total: {{ total }}
+                </td>
+                <td>
+                    {{ total_amount }}
+                </td>
+                <td>
+                    {{ total_special }}
+                </td>
+
+                <td>
+
+                </td>
+            </tr>
+
+        </table
+
+    {% endif %}</p>
+    {% if object.pk %}
+        <form method="GET" action="{% url 'giving:delete_donor' object.pk %}">
+            {% csrf_token %}
+            <input type="submit" class="btn btn-sm btn-danger" value="delete"></input>
+        </form>
+    {% endif %}
+
+{% endblock %}

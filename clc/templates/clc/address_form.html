@@ -1,0 +1,24 @@
+{% extends "clc/base.html" %}
+
+{% block sidebar %}{% endblock %}
+{% block content %}
+
+    <h1>{% include "home/create_update.html" %}Address </h1>
+
+    <form method="POST" class="form-horizontal">{% csrf_token %}
+
+        <input type="submit" value="Submit">
+        <a href="{% url 'clc:address_list' %}">Cancel</a>
+        <table border="1">
+            {{ form.as_table }}
+        </table>
+
+    </form>
+
+    {% if object.pk %}
+        <form method="GET" action="{% url 'clc:address_delete' object.pk %}">
+            {% csrf_token %}
+            <input type="submit" class="btn btn-sm btn-danger" value="delete"></input>
+        </form>
+    {% endif %}
+{% endblock %}

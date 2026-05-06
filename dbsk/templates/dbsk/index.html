@@ -1,0 +1,29 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'myaddr/style.css' %}">
+
+{% if addr_list %}
+    <table class="table table-striped">
+        <tr>
+            <th>Id</th>
+            <th>Last Name</th>
+            <th>edit</th>
+            <th>delete</th>
+        </tr>
+        {% for addr in addr_list %}
+            <tr>
+                <td>{{ addr.id }}</td>
+                <td>{{ addr.lastname }}</td>
+                <td><a href="{% url 'myaddr:update' addr.pk %}">edit</a></td>
+                <td>
+                    <form method="POST" action="{% url 'myaddr:delete' addr.pk %}">
+                        {% csrf_token %}
+                        <input type="submit" class="btn btn-sm btn-danger" value="delete"></input>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </table
+{% else %}
+    <p>No addresses are available.</p>
+{% endif %}

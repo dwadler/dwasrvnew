@@ -1,0 +1,13 @@
+{% extends "giving/base.html" %}
+
+
+{% block sidebar %}{% endblock %}
+{% block content %}
+
+    <form method="post">{% csrf_token %}
+        <p>Are you sure you want to delete "{{ object.id }} {{ object.first_name }} {{ object.last_name }}"?</p>
+        <input type="submit" value="Confirm">
+        <a href="{% url 'giving:donor_list' %}">Cancel</a>
+    </form>
+
+{% endblock %}

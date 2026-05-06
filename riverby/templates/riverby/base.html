@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'myaddr/astyle.css' %}">
+    <title>{% block title %}Riverby Database{% endblock %}</title>
+    {% block headstuff %}
+    {% endblock %}
+</head>
+
+<body>
+<h1 class="center">Riverby Database</h1>
+
+<div id="sidebar">
+    {% block sidebar %}
+
+    {% endblock %}
+</div>
+
+<div id="content">
+    {% block content %}{% endblock %}
+</div>
+</body>
+</html>

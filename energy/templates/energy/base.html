@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <title>{% block title %}Adler Database{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'energy/astyle.css' %}">
+    {% block headstuff %}
+    {% endblock %}
+</head>
+
+<body>
+<h2 class="center">Adler Database</h2>
+
+<div id="sidebar">
+    {% block sidebar %}
+
+    {% endblock %}
+</div>
+
+<div id="content">
+    {% block content %}{% endblock %}
+</div>
+</body>
+</html>

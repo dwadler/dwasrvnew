@@ -1,0 +1,7 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'myaddr/style.css' %}">
+<form method="POST" class="form-horizontal">{% csrf_token %}
+
+    {{ form.as_p }}
+</form>

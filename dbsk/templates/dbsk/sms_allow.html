@@ -1,0 +1,30 @@
+{% extends "dbsk/base.html" %}
+
+{% block sidebar %}{% endblock %}
+{% block content %}
+    <h2>In order to allow SMS notifications, please enter the following information</h2>
+    <form method="POST" class="form-horizontal"><input type="hidden" name="csrfmiddlewaretoken"
+                                                       value="5AKcv2J2K1AZPckQR6uj13UBs101EtWfqYR1HJ8flwXXQhtmNh3YkKLYrOTeOGhc">
+        Name:
+        <br>
+        <input type="text" name="name" maxlength="50" required id="id_name">
+        <br>
+        Phone number:
+        <br>
+        <input type="text" name="phoneNumber" maxlength="20" required id="id_phoneNumber">
+        <br>
+        I agree to receive notifications from 855-760-1617.
+        <br>
+        Msg & data rates may apply.
+        <br>
+        Reply STOP to opt out. HELP for help.
+        <br>
+
+        <input type="checkbox" name="smsAllow" required id="id_smsAllow">
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+
+
+
+{% endblock %}
