@@ -5,6 +5,8 @@ from datetime import datetime
 from django.shortcuts import render
 from twilio.rest import Client
 
+
+from dwasrvnew.settings import TWILIO_ACCT_SID, TWILIO_AUTH_TOKEN
 from .models import Schedule, Volunteer
 
 
@@ -19,9 +21,8 @@ def sms_test(request):
 
 def send_sms(textPhone, messageText):
     # twilio code
-    account_sid = 'AC08260cb8c35087ac00c7bfb2e528482f'
-    auth_token = 'f6471f809d207ae4756116f717f01c53'
-    client = Client(account_sid, auth_token)
+
+    client = Client(TWILIO_ACCT_SID, TWILIO_AUTH_TOKEN)
     formattedPhone = format_phone(textPhone)
     print(f'formatted phone#: {formattedPhone}')
     #    formattedPhone = '+18455942721'
